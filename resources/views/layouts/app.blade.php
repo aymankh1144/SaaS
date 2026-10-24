@@ -176,7 +176,7 @@
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
+                <i class="fas fa-check-circle"></i> <span style="white-space: pre-line;" dir="auto">{{ session('success') }}</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif

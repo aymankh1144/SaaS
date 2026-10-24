@@ -8,7 +8,8 @@ class PlatformController extends Controller
 {
     public function index()
     {
-        $restaurants = Restaurant::where('is_active', true)->paginate(12);
+        $restaurants = Restaurant::where('is_active', true)->latest()->paginate(12);
+
         return view('platform.index', compact('restaurants'));
     }
 
@@ -19,7 +20,8 @@ class PlatformController extends Controller
 
     public function restaurants()
     {
-        $restaurants = Restaurant::where('is_active', true)->paginate(12);
+        $restaurants = Restaurant::where('is_active', true)->latest()->paginate(12);
+
         return view('platform.restaurants', compact('restaurants'));
     }
 }

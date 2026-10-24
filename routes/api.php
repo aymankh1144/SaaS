@@ -1,8 +1,3 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// لا توجد مسارات API حالياً. أي مسارات تُضاف هنا تحمل البادئة /api تلقائياً.

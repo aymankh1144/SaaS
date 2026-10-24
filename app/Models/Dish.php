@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Dish extends Model
 {
     protected $fillable = [
-        'restaurant_id',
         'category_id',
         'name',
         'description',
@@ -25,6 +25,13 @@ class Dish extends Model
         'is_vegan' => 'boolean',
         'is_spicy' => 'boolean',
     ];
+
+    public function deleteImage(): void
+    {
+        if ($this->image_path) {
+            Storage::disk('public')->delete($this->image_path);
+        }
+    }
 
     public function restaurant(): BelongsTo
     {

@@ -6,14 +6,22 @@ use App\Models\Restaurant;
 
 class MenuController extends Controller
 {
-    public function show($slug)
+    public function show(string $slug)
     {
         $restaurant = Restaurant::where('slug', $slug)
             ->where('is_active', true)
+            ->with('colorScheme')
             ->firstOrFail();
 
-        $categories = $restaurant->categories()->orderBy('sort_order')->get();
-        $offers = $restaurant->offers()->where('start_date', '<=', now())
+        // تحميل مسبق للأطباق المتوفرة فقط (يتفادى استعلاماً لكل فئة).
+        $categories = $restaurant->categories()
+            ->with(['dishes' => fn ($query) => $query->where('is_available', true)->orderBy('id')])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $offers = $restaurant->offers()
+            ->where('start_date', '<=', now())
             ->where('end_date', '>=', now())
             ->get();
 

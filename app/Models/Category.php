@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
+    // restaurant_id غير قابل للتعبئة الجماعية عن قصد؛ يُضبط فقط عبر
+    // العلاقة ($restaurant->categories()->create(...)).
     protected $fillable = [
-        'restaurant_id',
         'name',
         'description',
         'icon',

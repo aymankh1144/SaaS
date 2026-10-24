@@ -27,7 +27,7 @@
                             <label for="username" class="form-label fw-bold">
                                 <i class="fas fa-user"></i> اسم المستخدم
                             </label>
-                            <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" required autofocus>
+                            <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}" required autofocus>
                             @error('username')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

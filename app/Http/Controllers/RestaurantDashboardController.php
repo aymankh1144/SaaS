@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Restaurant;
+use Illuminate\Http\Request;
 
 class RestaurantDashboardController extends Controller
 {
-    public function dashboard($slug)
+    public function dashboard(Request $request, string $slug)
     {
-        $restaurant = Restaurant::where('slug', $slug)->firstOrFail();
+        $restaurant = $this->currentRestaurant($request);
+
         $categoriesCount = $restaurant->categories()->count();
         $dishesCount = $restaurant->dishes()->count();
         $offersCount = $restaurant->offers()->count();

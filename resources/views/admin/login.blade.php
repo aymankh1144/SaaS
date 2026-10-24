@@ -22,7 +22,7 @@
                             <label for="email" class="form-label fw-bold">
                                 <i class="fas fa-envelope"></i> البريد الإلكتروني
                             </label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

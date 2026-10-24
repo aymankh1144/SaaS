@@ -1,270 +1,139 @@
 # MenuSaaS Platform 🍽️
 
-منصة SaaS متقدمة لإدارة مينيوهات المطاعم والكافيهات بشكل احترافي وسهل.
+منصة SaaS متعددة المطاعم (Multi-tenant) لإدارة مينيوهات المطاعم والكافيهات، مبنية بـ **Laravel 10**.
+
+> المجلد `mr-mkh/` تطبيق PHP/SQLite مستقل لمطعم واحد (MR. DONAR) وليس جزءاً من هذه المنصة؛ له إعداده الخاص.
 
 ## ✨ المميزات
 
-### 👨‍💼 لوحة التحكم الرئيسية (للمنصة)
-- ✅ إضافة ومدارة المطاعم
-- ✅ تحميل اللوغو
-- ✅ اختيار 6 ألوان متناسقة (الهوية البصرية)
-- ✅ إنشاء بيانات اعتماد تلقائية (اسم مستخدم + كلمة مرور)
-- ✅ تفعيل/تعطيل المطاعم
+### 👨‍💼 أدمن المنصة
+- إضافة مطاعم جديدة برفع الشعار واختيار 6 ألوان للهوية البصرية
+- توليد اسم مستخدم وكلمة مرور تلقائياً (تُعرض مرة واحدة فقط)
+- تفعيل/تعطيل مطعم، إعادة تعيين كلمة مروره، أو حذفه مع كل بياناته
 
-### 🏪 لوحات التحكم الخاصة بكل مطعم
-كل مطعم له لوحة تحكم منفصلة تماماً:
-- ✅ إدارة الفئات (الأطباق، المشروبات، الحلويات، إلخ)
-- ✅ إدارة الأطباق (إضافة، تعديل، حذف)
-- ✅ رفع صور الأطباق
-- ✅ إدارة العروض والخصومات
-- ✅ التحكم في توفر الأطباق
+### 🏪 لوحة كل مطعم (معزولة عن باقي المطاعم)
+- إدارة الفئات والأطباق (مع صور) والعروض والخصومات
+- التحكم في توفر الأطباق (متوفر / غير متوفر)
 
-### 🎨 نظام الهوية البصرية المرن
-- 6 ألوان قابلة للتخصيص لكل مطعم:
-  - اللون الأساسي
-  - اللون الثانوي
-  - اللون الإضافي
-  - لون النص
-  - لون الحدود
-  - لون الخلفية
-
-### 📱 مينيو إلكتروني للزبائن
-- تصميم جميل وسهل الاستخدام
-- تطبيق الألوان المخصصة تلقائياً
-- عرض الأطباق المتوفرة فقط
-- عرض العروض النشطة
+### 📱 المينيو العام للزبائن
+- يطبّق ألوان المطعم تلقائياً، ويعرض الأطباق المتوفرة والعروض السارية فقط
 
 ---
 
-## 🚀 الخطوات الأساسية للتثبيت
+## 🚀 التثبيت
 
-### 1️⃣ المتطلبات الأساسية
-```bash
-- PHP 8.1+
-- Composer
-- MySQL 5.7+
-- Node.js (اختياري، للـ CSS/JS الإضافية)
-```
+**المتطلبات:** PHP 8.1+ (مع إضافات `gd`, `mbstring`, `xml`, `curl`, `pdo_mysql` أو `pdo_sqlite`)، Composer، MySQL 5.7+ (أو SQLite للتجربة).
 
-### 2️⃣ تثبيت المشروع
 ```bash
-# استنساخ الريبو
 git clone https://github.com/aymankh1144/SaaS.git
 cd SaaS
 
-# تثبيت المزيجات
 composer install
-
-# نسخ ملف البيئة
 cp .env.example .env
-
-# إنشاء مفتاح التطبيق
 php artisan key:generate
+```
 
-# إنشاء قاعدة البيانات والجداول
+### 1) قاعدة البيانات
+عدّل `DB_*` في `.env` ثم:
+```bash
 php artisan migrate
+```
+> للتجربة بدون MySQL: ضع `DB_CONNECTION=sqlite` واحذف باقي `DB_*`، ثم `touch database/database.sqlite`.
 
-# (اختياري) تعبئة بيانات تجريبية
+### 2) حساب أدمن المنصة (مطلوب)
+لا توجد كلمة مرور افتراضية. ولّد الهاش وضعه في `.env`:
+```bash
+php artisan tinker --execute="echo Hash::make('كلمة-مرور-قوية');"
+```
+```dotenv
+ADMIN_EMAIL=you@example.com
+ADMIN_PASSWORD_HASH='$2y$12$.....'   # بين علامتي اقتباس مفردتين
+```
+بدونهما لا يستطيع أي شخص تسجيل الدخول كأدمن.
+
+### 3) رفع الصور
+```bash
+php artisan storage:link
+```
+
+### 4) التشغيل
+```bash
+php artisan serve        # http://localhost:8000
+```
+
+### (اختياري) بيانات تجريبية — للتطوير فقط
+```bash
 php artisan db:seed
 ```
+ينشئ مطعماً تجريبياً: `/restaurants/demo-restaurant/admin/login` ← `demo` / `password`.
+الـ seeder يرفض العمل عندما `APP_ENV=production`.
 
-### 3️⃣ تشغيل المشروع
+---
+
+## 🧪 الاختبارات
 ```bash
-# بدء خادم التطوير
-php artisan serve
-
-# سيكون الموقع متاحاً على: http://localhost:8000
+php artisan test
 ```
+تعمل على SQLite في الذاكرة (مفعّلة في `phpunit.xml`) وتغطي: دخول الأدمن، إنشاء المطاعم، عزل بيانات المطاعم عن بعضها، رفع الصور وحذفها، التحقق من العروض، وإظهار المينيو العام.
 
 ---
 
-## 📊 بنية قاعدة البيانات
+## 🛣️ المسارات
 
-### الجداول الرئيسية:
+| المسار | الوصف |
+|---|---|
+| `/` · `/about` · `/restaurants` | صفحات المنصة العامة |
+| `/restaurants/{slug}` | المينيو العام للمطعم |
+| `/admin/login` | دخول أدمن المنصة |
+| `/admin/dashboard` | إدارة المطاعم |
+| `/restaurants/{slug}/admin/login` | دخول صاحب المطعم |
+| `/restaurants/{slug}/admin/dashboard` | لوحة المطعم |
+| `/restaurants/{slug}/admin/{categories,dishes,offers}` | إدارة الفئات والأطباق والعروض |
 
-#### `restaurants` - المطاعم
-```sql
-- id: معرف المطعم
-- name: اسم المطعم
-- slug: رابط فريد (مثلا: pizza-palace-abc123)
-- logo_path: مسار اللوغو
-- admin_email: بريد المدير
-- admin_username: اسم مستخدم المدير
-- admin_password: كلمة مرور المدير (مشفرة)
-- is_active: حالة المطعم
-```
-
-#### `color_schemes` - نظام الألوان
-```sql
-- restaurant_id: المطعم
-- primary_color: اللون الأساسي
-- secondary_color: اللون الثانوي
-- accent_color: اللون الإضافي
-- text_color: لون النص
-- border_color: لون الحدود
-- background_color: لون الخلفية
-```
-
-#### `categories` - الفئات
-```sql
-- restaurant_id: المطعم
-- name: اسم الفئة (مثلا: بيتزا، شاورما)
-- description: الوصف
-- icon: رمز الفئة
-- sort_order: الترتيب
-```
-
-#### `dishes` - الأطباق
-```sql
-- restaurant_id: المطعم
-- category_id: الفئة
-- name: اسم الطبق
-- description: الوصف
-- price: السعر
-- image_path: صورة الطبق
-- is_available: متوفر أم لا
-- is_vegan: هل الطبق نباتي
-- is_spicy: هل الطبق حار
-```
-
-#### `offers` - العروض
-```sql
-- restaurant_id: المطعم
-- title: عنوان العرض
-- discount_type: نوع الخصم (نسبة / مبلغ ثابت)
-- discount_value: قيمة الخصم
-- start_date: تاريخ البداية
-- end_date: تاريخ النهاية
-```
-
-#### `restaurant_users` - موظفو المطاعم
-```sql
-- restaurant_id: المطعم
-- username: اسم المستخدم
-- email: البريد الإلكتروني
-- password: كلمة المرور
-- role: الدور (owner, manager, staff)
-```
+تسجيل الخروج يتم بطلب `POST` فقط.
 
 ---
 
-## 🔐 نظام المصادقة والأمان
+## 🔐 الأمان
 
-### مستويات الوصول:
+- **عزل المطاعم:** كل استعلام في لوحة المطعم مقيّد بمطعم الجلسة، فلا يمكن لمطعم قراءة أو تعديل بيانات غيره بتغيير رقم في الرابط.
+- **Rate limiting:** 5 محاولات دخول في الدقيقة (أدمن وأصحاب المطاعم).
+- **الجلسات:** تُجدَّد بعد تسجيل الدخول والخروج (ضد session fixation)، ويُنهى دخول المطعم فوراً عند تعطيله.
+- **الألوان** تُتحقق بصيغة `#RRGGBB` فقط (لا حقن CSS)، والصور بامتدادات `jpg/png/webp` وحجم أقصى.
+- **كلمات المرور** مخزّنة مشفّرة (bcrypt) ولا تُحفظ أي أسرار في الكود.
 
-#### 1️⃣ **الأدمن (أنت)**
-- رابط منفصل: `/admin/login`
-- إدارة جميع المطاعم
-- إضافة/تعديل/حذف المطاعم
-- الحقوق الكاملة
-
-#### 2️⃣ **صاحب/مدير المطعم**
-- رابط منفصل: `/restaurants/{slug}/admin/login`
-- إدارة بيانات مطعمه فقط
-- إدارة الفئات والأطباق والعروض
-- عرض الإحصائيات
-
-#### 3️⃣ **الموظفون**
-- نفس الرابط مع صلاحيات محدودة
-- يمكنهم تعديل معلومات محددة
-
----
-
-## 📝 أمثلة الاستخدام
-
-### مثال: إضافة مطعم جديد
-
-```php
-// من خلال لوحة التحكم أو API
-$restaurant = Restaurant::create([
-    'name' => 'بيتزا بالاتشو',
-    'slug' => 'pizza-palazzo-xyz',
-    'admin_email' => 'owner@pizza.com',
-    'admin_username' => 'pizzaowner',
-    'admin_password' => Hash::make('securePassword123'),
-]);
-
-// إنشاء نظام الألوان
-ColorScheme::create([
-    'restaurant_id' => $restaurant->id,
-    'primary_color' => '#FF6B6B',      // أحمر
-    'secondary_color' => '#FFA500',    // برتقالي
-    'accent_color' => '#FFD700',       // ذهبي
-    'text_color' => '#333333',         // رمادي غامق
-    'border_color' => '#CCCCCC',       // رم��دي فاتح
-    'background_color' => '#FFFFFF',   // أبيض
-]);
+### قبل النشر في الإنتاج
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+SESSION_SECURE_COOKIE=true
 ```
-
-### مثال: إضافة فئة وأطباق
-
-```php
-// إضافة فئة
-$category = $restaurant->categories()->create([
-    'name' => 'بيتزا كلاسيكية',
-    'icon' => '🍕',
-    'sort_order' => 1,
-]);
-
-// إضافة طبق
-$dish = $restaurant->dishes()->create([
-    'category_id' => $category->id,
-    'name' => 'بيتزا مرغريتا',
-    'description' => 'جبنة موتزاريلا طازة وصلصة طماطم',
-    'price' => 45.00,
-    'is_available' => true,
-    'is_vegan' => true,
-    'is_spicy' => false,
-]);
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan config:cache && php artisan route:cache && php artisan view:cache
 ```
+واجعل جذر الخادم (document root) هو مجلد `public/` فقط.
 
 ---
 
-## 🛣️ المسارات الرئيسية
+## 📊 قاعدة البيانات
 
-### للعامة:
-- `/` - الصفحة الرئيسية
-- `/about` - معلومات المنصة
-- `/restaurants` - قائمة المطاعم
-- `/restaurants/{slug}` - مينيو المطعم
-
-### للأدمن:
-- `/admin/login` - تسجيل الدخول
-- `/admin/dashboard` - لوحة التحكم
-- `/admin/restaurants` - إدارة المطاعم
-
-### لكل مطعم:
-- `/restaurants/{slug}/admin/login` - تسجيل الدخول
-- `/restaurants/{slug}/admin/dashboard` - لوحة التحكم
-- `/restaurants/{slug}/admin/categories` - إدارة الفئات
-- `/restaurants/{slug}/admin/dishes` - إدارة الأطباق
-- `/restaurants/{slug}/admin/offers` - إدارة العروض
+`restaurants` · `color_schemes` · `categories` · `dishes` · `offers` · `restaurant_users`
+(انظر `database/migrations`). حذف مطعم يحذف فئاته وأطباقه وعروضه (`ON DELETE CASCADE`).
 
 ---
 
-## 🎯 الميزات المستقبلية
+## 🎯 قيد التطوير
 
+- [ ] دخول الموظفين بأدوار (owner / manager / staff) — الجدول `restaurant_users` جاهز دون واجهة
 - [ ] نظام الدفع والاشتراكات
-- [ ] تطبيق موبايل
-- [ ] تحليلات متقدمة
 - [ ] نظام الطلبات (Order Management)
-- [ ] تقييمات الزبائن
-- [ ] تكامل مع منصات التوصيل
+- [ ] تحليلات متقدمة · تقييمات الزبائن · تكامل مع منصات التوصيل
 
 ---
 
 ## 📄 الترخيص
 
-MIT License - استخدم بحرية!
-
----
-
-## 💬 الدعم والتواصل
-
-للأسئلة والدعم:
-- 📧 البريد الإلكتروني: support@menusaas.com
-- 🐙 GitHub Issues: [اضغط هنا](https://github.com/aymankh1144/SaaS/issues)
-
----
+MIT License
 
 **صُنع بـ ❤️ بواسطة Ayman Kh**
