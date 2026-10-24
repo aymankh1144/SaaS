@@ -14,9 +14,12 @@
         <p class="text-muted">لوحة التحكم الرئيسية</p>
     </div>
     <div class="col-auto">
-        <a href="{{ route('restaurant.logout', $restaurant->slug) }}" class="btn btn-outline-danger">
-            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-        </a>
+        <form action="{{ route('restaurant.logout', $restaurant->slug) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-outline-danger">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+        </form>
     </div>
 </div>
 

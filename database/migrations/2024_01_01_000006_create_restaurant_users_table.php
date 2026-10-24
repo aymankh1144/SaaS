@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('restaurant_id')->constrained()->onDelete('cascade');
             $table->string('username');
+            $table->unique(['restaurant_id', 'username']);
             $table->string('email');
             $table->string('password');
             $table->enum('role', ['owner', 'manager', 'staff'])->default('staff');

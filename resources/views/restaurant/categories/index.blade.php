@@ -30,7 +30,7 @@
                         @if($category->description)
                             <p class="card-text text-muted small">{{ $category->description }}</p>
                         @endif
-                        <small class="text-muted">الأطباق: {{ $category->dishes()->count() }}</small>
+                        <small class="text-muted">الأطباق: {{ $category->dishes_count }}</small>
                         <div class="d-flex gap-2 mt-3">
                             <a href="{{ route('restaurant.categories.edit', [$restaurant->slug, $category->id]) }}" class="btn btn-sm btn-outline-primary flex-grow-1">
                                 <i class="fas fa-edit"></i> تعديل

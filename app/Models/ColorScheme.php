@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ColorScheme extends Model
 {
     protected $fillable = [
-        'restaurant_id',
         'primary_color',
         'secondary_color',
         'accent_color',

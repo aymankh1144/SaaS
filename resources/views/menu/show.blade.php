@@ -62,7 +62,7 @@
             @endif
 
             @php
-                $dishes = $category->dishes()->where('is_available', true)->get();
+                $dishes = $category->dishes; // محمّلة مسبقاً (المتوفرة فقط) من MenuController
             @endphp
 
             @if($dishes->count() > 0)

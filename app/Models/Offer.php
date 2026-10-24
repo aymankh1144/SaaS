@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Offer extends Model
 {
     protected $fillable = [
-        'restaurant_id',
         'title',
         'discount_type',
         'discount_value',

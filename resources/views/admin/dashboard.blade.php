@@ -87,6 +87,27 @@
                                     <a href="{{ route('restaurant.dashboard', $restaurant->slug) }}" class="btn btn-sm btn-outline-info" title="لوحة التحكم">
                                         <i class="fas fa-cogs"></i>
                                     </a>
+                                    <form action="{{ route('admin.restaurants.toggle', $restaurant) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-outline-warning" title="{{ $restaurant->is_active ? 'تعطيل' : 'تفعيل' }}">
+                                            <i class="fas {{ $restaurant->is_active ? 'fa-pause' : 'fa-play' }}"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('admin.restaurants.reset-password', $restaurant) }}" method="POST" class="d-inline"
+                                          onsubmit="return confirm('سيتم إنشاء كلمة مرور جديدة وإبطال القديمة. متابعة؟')">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary" title="كلمة مرور جديدة">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('admin.restaurants.destroy', $restaurant) }}" method="POST" class="d-inline"
+                                          onsubmit="return confirm('سيتم حذف المطعم وكل فئاته وأطباقه وعروضه نهائياً. متابعة؟')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -108,8 +129,11 @@
 
 <!-- Logout -->
 <div class="mt-4 text-center">
-    <a href="{{ route('admin.logout') }}" class="btn btn-outline-danger">
-        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-    </a>
+    <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-outline-danger">
+            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+        </button>
+    </form>
 </div>
 @endsection

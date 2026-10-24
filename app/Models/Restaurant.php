@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 
 class Restaurant extends Model
 {
@@ -16,11 +17,31 @@ class Restaurant extends Model
         'admin_username',
         'admin_password',
         'is_active',
-        'created_at',
-        'updated_at',
     ];
 
     protected $hidden = ['admin_password'];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    /** مفتاح الجلسة الذي يدل على أن صاحب هذا المطعم سجّل الدخول. */
+    public function sessionKey(): string
+    {
+        return "restaurant_{$this->id}_logged_in";
+    }
+
+    /** يحذف ملفات المطعم (الشعار وصور الأطباق) من التخزين. */
+    public function deleteFiles(): void
+    {
+        $paths = $this->dishes()->whereNotNull('image_path')->pluck('image_path');
+
+        if ($this->logo_path) {
+            $paths->push($this->logo_path);
+        }
+
+        Storage::disk('public')->delete($paths->all());
+    }
 
     public function colorScheme(): HasOne
     {
