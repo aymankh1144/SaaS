@@ -11,9 +11,9 @@ FROM php:8.3-apache
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev libzip-dev \
+      libfreetype6-dev libjpeg62-turbo-dev libpng-dev libwebp-dev libzip-dev libpq-dev \
  && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
- && docker-php-ext-install -j"$(nproc)" gd pdo_mysql zip opcache \
+ && docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql zip opcache \
  && a2enmod rewrite headers \
  && rm -rf /var/lib/apt/lists/*
 

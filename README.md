@@ -80,12 +80,14 @@ php artisan db:seed
 |---|---|
 | `APP_KEY` | ولّده محلياً: `php artisan key:generate --show` |
 | `APP_URL` | رابط موقعك بـ `https://` |
-| `DB_CONNECTION` / `DB_HOST` / `DB_PORT` / `DB_DATABASE` / `DB_USERNAME` / `DB_PASSWORD` | بيانات قاعدة MySQL |
+| `DB_CONNECTION` / `DB_HOST` / `DB_PORT` / `DB_DATABASE` / `DB_USERNAME` / `DB_PASSWORD` | بيانات القاعدة. الصورة تدعم **MySQL** (`mysql` والمنفذ 3306) و**PostgreSQL** (`pgsql` والمنفذ 5432) |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` | حساب أدمن المنصة (الهاش بين علامتي اقتباس مفردتين) |
 | `SESSION_SECURE_COOKIE` | `true` عند استخدام HTTPS |
 
 القيم الافتراضية في الصورة: `APP_ENV=production` و`APP_DEBUG=false` والسجلات إلى `stderr` والجلسات في قاعدة البيانات.
 عند كل إقلاع تُنفَّذ الهجرات تلقائياً (`RUN_MIGRATIONS=false` لتعطيل ذلك). فحص الصحة: `/healthz`.
+
+> 💡 في Ghaymah Cloud: أنشئ **Managed Volume** وأرفقه بالتطبيق على المسار `/var/www/html/storage/app/public` لتبقى الصور بعد إعادة النشر.
 
 > ⚠️ **ملفات الصور المرفوعة** تُخزَّن في `storage/app/public` داخل الحاوية، وتضيع عند كل إعادة نشر ما لم يُربط عليها **Volume دائم** (`/var/www/html/storage/app/public`). إن لم توفر المنصة ذلك فاستخدم تخزيناً خارجياً (S3 أو ما يماثله).
 
