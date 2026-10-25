@@ -11,6 +11,9 @@ use App\Http\Controllers\RestaurantAuthController;
 use App\Http\Controllers\RestaurantDashboardController;
 use Illuminate\Support\Facades\Route;
 
+// فحص الصحة للحاوية/الموازن (لا يلمس قاعدة البيانات)
+Route::get('/healthz', fn () => response('ok', 200, ['Content-Type' => 'text/plain']));
+
 // ── صفحات المنصة العامة ─────────────────────────────────────────
 Route::get('/', [PlatformController::class, 'index'])->name('platform.index');
 Route::get('/about', [PlatformController::class, 'about'])->name('platform.about');

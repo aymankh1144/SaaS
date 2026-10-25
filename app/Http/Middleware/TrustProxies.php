@@ -12,7 +12,9 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    // التطبيق يعمل خلف موازن/بروكسي المنصة (HTTPS ينتهي هناك)، فنثق بترويسات X-Forwarded-*
+    // لكي تُولَّد الروابط بـ https وتعمل الكوكيز الآمنة.
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

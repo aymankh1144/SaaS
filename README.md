@@ -70,6 +70,29 @@ php artisan db:seed
 
 ---
 
+## 🐳 النشر بـ Docker (مثل Ghaymah Cloud)
+
+المستودع يحوي `Dockerfile` جاهزاً (Apache + PHP 8.3 على المنفذ **8080**). في منصة الاستضافة: *Connect a repository* ← الرابط والفرع `main` ← **Build engine: Dockerfile** ← Port `8080` ← Instances `1`.
+
+**Environment variables المطلوبة:**
+
+| المتغير | القيمة |
+|---|---|
+| `APP_KEY` | ولّده محلياً: `php artisan key:generate --show` |
+| `APP_URL` | رابط موقعك بـ `https://` |
+| `DB_CONNECTION` / `DB_HOST` / `DB_PORT` / `DB_DATABASE` / `DB_USERNAME` / `DB_PASSWORD` | بيانات قاعدة MySQL |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD_HASH` | حساب أدمن المنصة (الهاش بين علامتي اقتباس مفردتين) |
+| `SESSION_SECURE_COOKIE` | `true` عند استخدام HTTPS |
+
+القيم الافتراضية في الصورة: `APP_ENV=production` و`APP_DEBUG=false` والسجلات إلى `stderr` والجلسات في قاعدة البيانات.
+عند كل إقلاع تُنفَّذ الهجرات تلقائياً (`RUN_MIGRATIONS=false` لتعطيل ذلك). فحص الصحة: `/healthz`.
+
+> ⚠️ **ملفات الصور المرفوعة** تُخزَّن في `storage/app/public` داخل الحاوية، وتضيع عند كل إعادة نشر ما لم يُربط عليها **Volume دائم** (`/var/www/html/storage/app/public`). إن لم توفر المنصة ذلك فاستخدم تخزيناً خارجياً (S3 أو ما يماثله).
+
+تجربة محلية: `docker compose up --build` ثم `http://localhost:8080`.
+
+---
+
 ## 🧪 الاختبارات
 ```bash
 php artisan test
